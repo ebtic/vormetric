@@ -3,15 +3,11 @@
     "code": "vormetric",
     "description": "Vormetric Data Security Agent",
     "name": "vormetric",
-    "publisher": "appstack",
+    "publisher": "app360",
     "role": "library",
-    "supported_os": {
-        "centos": [ 6 ],
-        "redhat": [ 6 ],
-        "ubuntu": [ 12.04 ],
-        "windows": [ "2008R2" ]
-    },
     "tags": [ "built-in" ],
     "updated_at": 1415937367,
     "website": "http://www.vormetric.com/"
+	"dependencies": [],
+    "puppet_class": "vormetric"
 }
