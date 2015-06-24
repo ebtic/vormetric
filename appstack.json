@@ -5,7 +5,7 @@
     "name": "vormetric",
     "publisher": "app360",
     "role": "library",
-    "tags": [ "built-in" ],
+    "tags": [],
     "updated_at": 1415937367,
     "website": "http://www.vormetric.com/",
     "dependencies": [],
