@@ -7,7 +7,7 @@
     "role": "library",
     "tags": [ "built-in" ],
     "updated_at": 1415937367,
-    "website": "http://www.vormetric.com/"
+    "website": "http://www.vormetric.com/",
 	"dependencies": [],
     "puppet_class": "vormetric"
 }
