@@ -8,6 +8,6 @@
     "tags": [ "built-in" ],
     "updated_at": 1415937367,
     "website": "http://www.vormetric.com/",
-	"dependencies": [],
+    "dependencies": [],
     "puppet_class": "vormetric"
 }
