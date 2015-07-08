@@ -1,12 +1,12 @@
 class vormetric::params {
 
   #default values of parameters for testing purpose
-  $vormetric_server_ip = "217.33.61.85"
-  $vormetric_server_dns = "DSM"
-  $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
-  $vm_dns = "none"
-  $guardpoint_list = "none"  
-  $status = "initial"
+  #$vormetric_server_ip = "217.33.61.85"
+  #$vormetric_server_dns = "DSM"
+  #$agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
+  #$vm_dns = "none"
+  #$guardpoint_list = "none"  
+  #$status = "initial"
 
   # these are parameters to be retrieved from hiera
   if $appcara::params::site {
