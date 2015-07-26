@@ -14,9 +14,8 @@ class vormetric::params {
     if $site_extsvc_option {
       $site_vormetric_option = $site_extsvc_option["vormetric"]
       if $site_vormetric_option {
-        $vormetric_server_ip = $site_vormetric_option["vormetric_server_ip"]
-        $vormetric_server_dns = $site_vormetric_option["vormetric_server_dns"]
-        $agent_download_url = $site_vormetric_option["agent_download_url"]   		
+        $host_ip = $site_vormetric_option["host_ip"]
+        $host_dns = $site_vormetric_option["host_dns"]
       }
     }	
   }
