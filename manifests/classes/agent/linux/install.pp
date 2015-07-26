@@ -2,11 +2,12 @@ class vormetric::agent::linux::install() {
 
   #if $vormetric::params::vm_agent_registered {
 	
-	$vm_management_folder = "/btconfig"
+    $vm_management_folder = "/btconfig"
+    $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
 	
-	#create management folder
-	file { "$vm_management_folder":
-	  ensure => directory, 
+    #create management folder
+    file { "$vm_management_folder":
+      ensure => directory, 
     }  
   
     #download python code
@@ -24,7 +25,7 @@ class vormetric::agent::linux::install() {
       cwd     => "$vm_management_folder",
       path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
       creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
-      command => "python vormetric_agent_management.py install $agent_download_url $vormetric_server_ip $vormetric_server_dns",
+      command => "python vormetric_agent_management.py install $agent_download_url $host_ip $host_dns",
       require => [File["$vm_management_folder/vormetric_agent_management.py"]],
     }
 	
