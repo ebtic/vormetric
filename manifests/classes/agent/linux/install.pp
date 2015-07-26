@@ -1,7 +1,8 @@
 class vormetric::agent::linux::install() {
 
   #if $vormetric::params::vm_agent_registered {
-	
+
+    notice("assign default parameters")  
     $vm_management_folder = "/btconfig"
     $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
 	
