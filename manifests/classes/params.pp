@@ -1,8 +1,8 @@
 class vormetric::params {
 
   #default values of parameters for testing purpose
-  $host_ip = "none"
-  $host_dns = "none"
+  #$host_ip = "none"
+  #$host_dns = "none"
   #$agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
   #$vm_dns = "none"
   #$guardpoint_list = "none"  
