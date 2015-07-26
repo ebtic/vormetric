@@ -11,7 +11,7 @@ class vormetric::agent::linux::install() {
     }  
   
     #download python code
-    file { "$vm_management_folder/vormetric_agent_management.py":
+    file { "${vm_management_folder}/vormetric_agent_management.py":
       ensure  => file,
       mode    => "0700",
       owner   => 'root',
@@ -25,8 +25,8 @@ class vormetric::agent::linux::install() {
       cwd     => "$vm_management_folder",
       path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
       creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
-      command => "python vormetric_agent_management.py install $agent_download_url $host_ip $host_dns",
-      require => [File["$vm_management_folder/vormetric_agent_management.py"]],
+      command => "python vormetric_agent_management.py install ${agent_download_url} ${host_ip} ${host_dns}",
+      require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
     }
 	
 	#register vormetric agent
