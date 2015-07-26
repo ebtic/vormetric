@@ -7,7 +7,8 @@ class vormetric::params {
   #$vm_dns = "none"
   #$guardpoint_list = "none"  
   #$status = "initial"
-
+  info("come here")
+  
   # these are parameters to be retrieved from hiera
   if $appcara::params::site {
     $site_extsvc_option = $appcara::params::site["extension_service_option"]
