@@ -14,6 +14,7 @@ class vormetric::params {
     if $site_extsvc_option {
       $site_vormetric_option = $site_extsvc_option["vormetric"]
       if $site_vormetric_option {
+        info("site_vormetric_option exists")	  
         $host_ip = "xx_${site_vormetric_option["host_ip"]}_xx"
         $host_dns = "yy_${site_vormetric_option["host_dns"]}_yy"
       }
