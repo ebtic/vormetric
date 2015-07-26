@@ -17,9 +17,21 @@ class vormetric::params {
         $host_ip = $site_vormetric_option["host_ip"]
         $host_dns = $site_vormetric_option["host_dns"]
       }
+	  else{
+	    $host_ip = "site_vormetric_option_false"
+        $host_dns = "site_vormetric_option_false"		
+      }	  
     }	
+    else{
+      $host_ip = "site_extsvc_option_false"
+      $host_dns = "site_extsrv_option_false"	  
+    }
   }
-
+  else{
+    $host_ip = "appcara_params_site_false"
+	$host_dns = "appcara_params_site_false"
+  }
+  
   if $appcara::params::server {
     $svr_extsvc_option = $appcara::params::server["extension_service_option"]
     if $svr_extsvc_option {
