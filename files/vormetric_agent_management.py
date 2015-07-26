@@ -80,9 +80,12 @@ def parse_parameters(argv):
       show_usage()
       sys.exit(0)
     elif sys.argv[1] == 'test':
-      AGENT_DOWNLOAD_URL = sys.argv[2]
-      SERVER_DNS = sys.argv[3]
-      SERVER_IP = sys.argv[4]	
+      if len(sys.argv) > 2:
+        AGENT_DOWNLOAD_URL = sys.argv[2]
+      if len(sys.argv) > 3:
+        SERVER_DNS = sys.argv[3]
+      if len(sys.argv) > 4:
+        SERVER_IP = sys.argv[4]	
       return 5	
     else:
       show_error('Incorrect parameters')
