@@ -14,8 +14,8 @@ class vormetric::params {
     if $site_extsvc_option {
       $site_vormetric_option = $site_extsvc_option["vormetric"]
       if $site_vormetric_option {
-        $host_ip = 'xx_' + $site_vormetric_option["host_ip"] +'_xx'
-        $host_dns = 'yy_' + $site_vormetric_option["host_dns"] + '_yy'
+        $host_ip = "xx_${site_vormetric_option["host_ip"]}_xx"
+        $host_dns = "yy_${site_vormetric_option["host_dns"]}_yy"
       }
 	  else{
 	    $host_ip = "site_vormetric_option_false"
