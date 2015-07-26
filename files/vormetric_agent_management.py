@@ -253,6 +253,7 @@ if __name__ == "__main__":
 
   #open log file
   logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='[%m/%d/%y, %H:%M:%S]',)
+  logging.info('Parameters: AGENT_DOWNLOAD_URL=' + AGENT_DOWNLOAD_URL)
 
   if running_mode == 0:        
     #make sure that DSM mapping exists in the hosts file

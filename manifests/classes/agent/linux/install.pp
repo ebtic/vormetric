@@ -20,13 +20,13 @@ class vormetric::agent::linux::install() {
     }
 
 	#install vormetric agent
-    #exec { "vormetric_agent_installation":
-    #  cwd     => "$vm_management_folder",
-    #  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
-    #  creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
-    #  command => "python vormetric_agent_managenent.py install $agent_download_url",
-    #  require => [File["$vm_management_folder/vormetric_agent_management.py"]],
-    #}
+    exec { "vormetric_agent_installation":
+      cwd     => "$vm_management_folder",
+      path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
+      creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
+      command => "python vormetric_agent_managenent.py install $agent_download_url",
+      require => [File["$vm_management_folder/vormetric_agent_management.py"]],
+    }
 	
 	#register vormetric agent
 	#exec { "vormetric_agent_registration":
