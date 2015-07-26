@@ -58,11 +58,11 @@ def parse_parameters(argv):
   if len(sys.argv) == 1:    
     show_error('Error: parameters are required')
   else:
-    if sys.argv[1] == 'install' and len(sys.argv) == 6:
+    if sys.argv[1] == 'install' and len(sys.argv) == 5:
       AGENT_DOWNLOAD_URL = sys.argv[2]
       SERVER_DNS = sys.argv[3]
       SERVER_IP = sys.argv[4]
-      VM_DNS = sys.argv[5]
+      VM_DNS = "test.com"
       return 0
     elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
@@ -79,6 +79,8 @@ def parse_parameters(argv):
     elif sys.argv[1] == 'help':
       show_usage()
       sys.exit(0)
+    elif sys.argv[1] == 'test':
+      return 5	
     else:
       show_error('Incorrect parameters')
 #*************************************************
@@ -253,7 +255,7 @@ if __name__ == "__main__":
 
   #open log file
   logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='[%m/%d/%y, %H:%M:%S]',)
-  logging.info('Parameters: AGENT_DOWNLOAD_URL=' + AGENT_DOWNLOAD_URL)
+  logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP)
 
   if running_mode == 0:        
     #make sure that DSM mapping exists in the hosts file
