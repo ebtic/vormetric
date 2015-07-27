@@ -259,7 +259,7 @@ def get_VM_DNS(operating_system):
   else: 
     vm_id = os.system('facter -p | grep appstack_server_identifier')  
     domain = os.system('facter -p | grep domain')
-    VM_DNS = vm_id + '.' + domain	
+    VM_DNS = '%s.%s' %(vm_id, domain)
       
 #*************************************************
 
@@ -272,7 +272,7 @@ if __name__ == "__main__":
   
   #open log file
   logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='[%m/%d/%y, %H:%M:%S]',)  
-  logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_DNS)
+  logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_ID)
 
   if running_mode == 0:        
     #make sure that DSM mapping exists in the hosts file
