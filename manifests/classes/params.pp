@@ -9,7 +9,7 @@ class vormetric::params {
 		#$host_ip = "host_ip"
 		#$host_dns = "host_dns"
         $host_ip = $site_vormetric_option["host_ip"]		
-        $host_dns = $site_vormetric_option["host_dns"]
+        $host_dns = $site_vormetric_option["host_dns"]        		
       }	  
     }	    
   }  
