@@ -257,8 +257,10 @@ def get_VM_DNS(operating_system):
   if operating_system == 'Windows':
     pass
   else: 
-    vm_id = os.system('facter -p | grep appstack_server_identifier')  
-    domain = os.system('facter -p | grep domain')
+    vm_id_params = os.system('facter -p | grep -w appstack_server_identifier').split('=>')  
+    vm_id = vm_id_params[1].trim()
+    domain_params = os.system('facter -p | grep -w domain').split('=>')
+    domain = domain_params[1].trim()
     VM_DNS = '%s.%s' %(vm_id, domain)
       
 #*************************************************
