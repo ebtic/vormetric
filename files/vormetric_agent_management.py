@@ -260,11 +260,11 @@ def get_VM_DNS(operating_system):
     #vm_id_params = os.system('facter -p | grep -w appstack_server_identifier').split('=>') 
     process = subprocess.Popen(['facter', '-p', '|', 'grep', '-w', 'appstack_server_identifier'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
-    vm_id = stdout.split('=>')[1].trim()
+    vm_id = stdout
     #domain_params = os.system('facter -p | grep -w domain').split('=>')
     process = subprocess.Popen(['facter', '-p', '|', 'grep', '-w', 'domain'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()  
-    domain = stdout.split('=>')[1].trim()
+    domain = stdout
     VM_DNS = '%s.%s' %(vm_id, domain)      
 #*************************************************
 
