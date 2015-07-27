@@ -52,7 +52,6 @@ def parse_parameters(argv):
   global AGENT_DOWNLOAD_URL  
   global SERVER_DNS
   global SERVER_IP
-  global VM_DNS
   global GUARD_POINT
 
   if len(sys.argv) == 1:    
@@ -62,7 +61,6 @@ def parse_parameters(argv):
       AGENT_DOWNLOAD_URL = sys.argv[2]
       SERVER_DNS = sys.argv[3]
       SERVER_IP = sys.argv[4]
-      VM_DNS = "test.com"
       return 0
     elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
@@ -254,14 +252,27 @@ def generate_installation_command(operating_system):
 #*************************************************
 
 #*************************************************
+def get_VM_DNS(operating_system):
+  global VM_DNS
+  if operating_system == 'Windows':
+    pass
+  else: 
+    vm_id = os.system('facter -p | grep appstack_server_identifier')  
+    domain = os.system('facter -p | grep domain')
+    VM_DNS = vm_id + '.' + domain	
+      
+#*************************************************
+
+#*************************************************
 #main program
 if __name__ == "__main__":
   running_mode = parse_parameters(sys.argv[1:])
-  set_variables()
-
+  get_VM_DNS(platform.system())  
+  set_variables()  
+  
   #open log file
-  logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='[%m/%d/%y, %H:%M:%S]',)
-  logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP)
+  logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='[%m/%d/%y, %H:%M:%S]',)  
+  logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_ID)
 
   if running_mode == 0:        
     #make sure that DSM mapping exists in the hosts file
