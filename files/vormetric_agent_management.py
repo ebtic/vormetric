@@ -259,10 +259,10 @@ def get_VM_DNS(operating_system):
   else: 
     process = os.popen('facter -p | grep -w appstack_server_identifier')
     stdout = process.read()
-    vm_id = stdout.split('=>')[1]    
+    vm_id = stdout.split('=>')[1].strip()   
     process = os.popen('facter -p | grep -w domain')
     stdout = process.read()  
-    domain = stdout.split('=>')[1]
+    domain = stdout.split('=>')[1].strip()
     VM_DNS = '%s.%s' %(vm_id, domain)      
 #*************************************************
 
