@@ -165,7 +165,7 @@ def update_facts(status, operating_system):
   else:
     fact_file = '/etc/facter/facts.d/vormetric_facts.txt'
     with open(fact_file, "w") as facts:
-      facts.write('AGENT_STATUS' + status)
+      facts.write('agent_status=' + status)
 #*************************************************
 
 #*************************************************
