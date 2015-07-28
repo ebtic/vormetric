@@ -57,23 +57,25 @@ def parse_parameters(argv):
   if len(sys.argv) == 1:    
     show_error('Error: parameters are required')
   else:
-    if sys.argv[1] == 'install' and len(sys.argv) == 5:
+    if sys.argv[1] == 'subscribe' and len(sys.argv) == 2:
+      return 0
+    elif sys.argv[1] == 'install' and len(sys.argv) == 5:
       AGENT_DOWNLOAD_URL = sys.argv[2]
       SERVER_DNS = sys.argv[3]
       SERVER_IP = sys.argv[4]
-      return 0
+      return 1
     elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
       VM_DNS = sys.argv[3]
-      return 1
+      return 2
     elif sys.argv[1] == 'encrypt' and len(sys.argv) == 3:
       GUARD_POINT = sys.argv[2]
-      return 2
+      return 3
     elif sys.argv[1] == 'decrypt' and len(sys.argv) == 3:
       GUARD_POINT = sys.argv[2]
-      return 3
-    elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
       return 4
+    elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
+      return 5
     elif sys.argv[1] == 'help':
       show_usage()
       sys.exit(0)
@@ -84,7 +86,7 @@ def parse_parameters(argv):
         SERVER_DNS = sys.argv[3]
       if len(sys.argv) > 4:
         SERVER_IP = sys.argv[4]	
-      return 5	
+      return 6	
     else:
       show_error('Incorrect parameters')
 #*************************************************
@@ -153,6 +155,13 @@ def update_hosts(server_ip, server_dns, host_file):
   with open(host_file, "a") as hosts:
     hosts.write(os.linesep)
     hosts.write(server_ip + ' ' + server_dns)
+#*************************************************
+
+#*************************************************
+#update facts for agent status
+def update_facts(status, fact_file):
+  with open(fact_file, "w") as facts:
+    facts.write('AGENT_STATUS' + status)
 #*************************************************
 
 #*************************************************
@@ -275,9 +284,12 @@ if __name__ == "__main__":
   
   #open log file
   logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='[%m/%d/%y, %H:%M:%S]',)  
-  logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_DNS)
+  #logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_DNS)
 
-  if running_mode == 0:        
+  if running_mode == 0:
+    update_facts('installation')
+
+  elif running_mode == 1:        
     #make sure that DSM mapping exists in the hosts file
     if not check_hosts(HOSTS_FILE, SERVER_DNS): 
       logging.info('Adding server DNS-IP mapping to hosts file') 
@@ -317,7 +329,7 @@ if __name__ == "__main__":
     else:
       logging.info('Failed to get the agent installer')
 
-  elif running_mode == 4:
+  elif running_mode == 5:
     logging.info('Uninstall Vormetric Agent')
     if platform.system() == 'Windows':
       os.system('C:\Windows\System32\msiexec.exe /x {EDAA46C4-E8FD-417D-ADB9-7E250D45F7C9} /quiet')
@@ -338,7 +350,7 @@ if __name__ == "__main__":
       except pexpect.EOF:
         pass
 
-  elif running_mode == 1:
+  elif running_mode == 2:
     if os.path.exists(CONFIG_FOLDER + '\\waitforrestart'):
       os.remove(CONFIG_FOLDER + '\\waitforrestart')
     else:
@@ -353,7 +365,7 @@ if __name__ == "__main__":
         else:
           logging.info('Vormetric Agent has been previously registered')	
 
-  elif running_mode == 2:
+  elif running_mode == 3:
     logging.info('Run dataxform to encrypt data')
     if platform.system() == 'Windows':
       os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin')        
@@ -386,7 +398,7 @@ if __name__ == "__main__":
     #TODO: update facter
     #call_ws(AGENT_DOWNLOAD_URL)
 
-  elif running_mode == 3:
+  elif running_mode == 4:
     logging.info('Run dataxform to decrypt data')
     if platform.system() == 'Windows':
       os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin')

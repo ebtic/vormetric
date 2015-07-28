@@ -9,7 +9,7 @@ class vormetric::params {
 		#$host_ip = "217.33.61.85"
 		#$host_dns = "DSM"
         $host_ip = $site_vormetric_option["host_ip"]		
-        $host_dns = $site_vormetric_option["host_dns"]        		
+        $host_dns = $site_vormetric_option["host_dns"]        
       }	  
     }	    
   }  
@@ -19,8 +19,8 @@ class vormetric::params {
     if $svr_extsvc_option {
       $svr_vormetric_option = $svr_extsvc_option['vormetric']
       if $svr_vormetric_option {
-        $vm_dns = $svr_vormetric_option["vm_dns"]
-        $guardpoint_list = $svr_vormetric_option["guardpoint_list"]
+	    $vm_state = "vormetric_service_subscription"
+        #$vm_state = $svr_vormetric_option["vm_state"]
       }
     }
   }
