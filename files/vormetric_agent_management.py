@@ -159,9 +159,13 @@ def update_hosts(server_ip, server_dns, host_file):
 
 #*************************************************
 #update facts for agent status
-def update_facts(status, fact_file):
-  with open(fact_file, "w") as facts:
-    facts.write('AGENT_STATUS' + status)
+def update_facts(status, operating_system):
+  if operating_system == 'Windows':
+    pass
+  else:
+    fact_file = '/etc/facter/facts.d/vormetric_facts.txt'
+    with open(fact_file, "w") as facts:
+      facts.write('AGENT_STATUS' + status)
 #*************************************************
 
 #*************************************************
@@ -261,10 +265,9 @@ def generate_installation_command(operating_system):
 #*************************************************
 
 #*************************************************
-def get_VM_DNS(operating_system):
-  global VM_DNS
+def get_VM_DNS(operating_system):  
   if operating_system == 'Windows':
-    pass
+    return "NONE"
   else: 
     process = os.popen('facter -p | grep -w appstack_server_identifier')
     stdout = process.read()
@@ -272,14 +275,15 @@ def get_VM_DNS(operating_system):
     process = os.popen('facter -p | grep -w domain')
     stdout = process.read()  
     domain = stdout.split('=>')[1].strip()
-    VM_DNS = '%s.%s' %(vm_id, domain)      
+    vm_dns = '%s.%s' %(vm_id, domain)   
+    return vm_dns
+     
 #*************************************************
 
 #*************************************************
 #main program
 if __name__ == "__main__":
-  running_mode = parse_parameters(sys.argv[1:])
-  get_VM_DNS(platform.system())  
+  running_mode = parse_parameters(sys.argv[1:])    
   set_variables()  
   
   #open log file
@@ -287,7 +291,8 @@ if __name__ == "__main__":
   #logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_DNS)
 
   if running_mode == 0:
-    update_facts('installation')
+    VM_DNS = get_VM_DNS(platform.system())
+    update_facts('installation.' + VM_DNS, platform.system())
 
   elif running_mode == 1:        
     #make sure that DSM mapping exists in the hosts file
