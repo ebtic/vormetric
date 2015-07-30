@@ -34,7 +34,7 @@ class vormetric::agent::windows::install (
         }
 	  }
 	  default: {
-	    file { "C:/default":
+	    file { "C:/$architecture":
 	      ensure => directory, 
           mode   => '0777',
           owner  => 'Administrator',
