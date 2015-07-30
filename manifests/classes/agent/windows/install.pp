@@ -11,27 +11,15 @@ class vormetric::agent::windows::install (
           provider => 'msi', 
           source   => 'http://www.python.org/ftp/python/2.7.5/python-2.7.5.msi',
           install_options => [{'ALLUSERS' => '1'}],
-        }
-		file { "C:/i386":
-	      ensure => directory, 
-          mode   => '0777',
-          owner  => 'Administrator',
-          group  => 'Administrators',
-        }
+        }		
 	  }
-      x86_64: { 
+      x64, x86_64, amd64: { 
 	    package { "python":
           ensure   => installed,
           provider => 'msi', 
           source   => 'http://www.python.org/ftp/python/2.7.5/python-2.7.5.amd64.msi',
 		  install_options => [{'ALLUSERS' => '1'}],
-        }    
-		file { "C:/x8664":
-	      ensure => directory, 
-          mode   => '0777',
-          owner  => 'Administrator',
-          group  => 'Administrators',
-        }
+        }    		
 	  }
 	  default: {
 	    file { "C:/$architecture":
