@@ -6,8 +6,6 @@ class vormetric::params {
     if $site_extsvc_option {
       $site_vormetric_option = $site_extsvc_option["vormetric"]
       if $site_vormetric_option {        
-		#$host_ip = "217.33.61.85"
-		#$host_dns = "DSM"
         $host_ip = $site_vormetric_option["host_ip"]		
         $host_dns = $site_vormetric_option["host_dns"]        
       }	  
@@ -19,8 +17,13 @@ class vormetric::params {
     if $svr_extsvc_option {
       $svr_vormetric_option = $svr_extsvc_option['vormetric']
       if $svr_vormetric_option {
-	    $vm_state = "vormetric_service_subscription"
-        #$vm_state = $svr_vormetric_option["vm_state"]
+	    $vm_state = $svr_vormetric_option["vm_state"]
+		if $vm_state == "subscribed" or $vm_state == "registered" {
+		  $files_existed = "true"
+		}
+		else{
+		  $files_existed = "false"
+		}
       }
     }
   }
