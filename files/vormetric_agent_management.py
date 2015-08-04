@@ -291,7 +291,7 @@ if __name__ == "__main__":
   #logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_DNS)
 
   if running_mode == 0:
-    logging.info('Subscribed: DNS' _ VM_DNS)  
+    logging.info('Subscribed: DNS=' + VM_DNS)  
     VM_DNS = get_VM_DNS(platform.system())
     update_facts('installation.' + VM_DNS, platform.system())
 
