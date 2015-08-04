@@ -3,11 +3,11 @@ class vormetric::agent::linux::install() {
   $vm_management_folder = "/btconfig"
   $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
     
-  file { "$vormetric::params::files_existed":
+  file { "/bttest_${vormetric::params::files_existed}":
     ensure => directory,
   }
 
-  file { "$vormetric::params::vm_state":  
+  file { "/bttest_${vormetric::params::vm_state}":  
     ensure => directory,
   }
 	
