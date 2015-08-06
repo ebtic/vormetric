@@ -292,7 +292,7 @@ if __name__ == "__main__":
 
   if running_mode == 0:     
     VM_DNS = get_VM_DNS(platform.system())
-	logging.info('Subscribed: DNS=' + VM_DNS) 
+    logging.info('Subscribed: DNS=' + VM_DNS) 
     update_facts('installation.' + VM_DNS, platform.system())
 
   elif running_mode == 1:        
