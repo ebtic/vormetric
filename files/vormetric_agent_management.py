@@ -61,8 +61,8 @@ def parse_parameters(argv):
       return 0
     elif sys.argv[1] == 'install' and len(sys.argv) == 5:
       AGENT_DOWNLOAD_URL = sys.argv[2]
-      SERVER_DNS = sys.argv[3]
-      SERVER_IP = sys.argv[4]
+      SERVER_IP = sys.argv[3]
+      SERVER_DNS = sys.argv[4]
       return 1
     elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
@@ -310,6 +310,7 @@ if __name__ == "__main__":
 
     #install Vormetric agent
     if os.path.exists(SETUP_FILE):
+      VM_DNS = get_VM_DNS(platform.system())
       execution_command = generate_installation_command(platform.system())
       logging.info('Install Vormetric Agent: ' + execution_command)
       if platform.system() == 'Windows':
@@ -330,8 +331,9 @@ if __name__ == "__main__":
             else:
               child.sendline('')
           child.expect(pexpect.EOF)
+          update_facts('ready', platform.system())
         except pexpect.EOF:
-          pass 
+          pass       
     else:
       logging.info('Failed to get the agent installer')
 
