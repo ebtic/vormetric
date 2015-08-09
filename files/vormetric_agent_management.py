@@ -64,9 +64,8 @@ def parse_parameters(argv):
       SERVER_IP = sys.argv[3]
       SERVER_DNS = sys.argv[4]
       return 1
-    elif sys.argv[1] == 'register' and len(sys.argv) == 4:
+    elif sys.argv[1] == 'register' and len(sys.argv) == 3:
       SERVER_DNS = sys.argv[2]
-      VM_DNS = sys.argv[3]
       return 2
     elif sys.argv[1] == 'encrypt' and len(sys.argv) == 3:
       GUARD_POINT = sys.argv[2]
@@ -373,6 +372,7 @@ if __name__ == "__main__":
         logging.info('Vormetric agent has not been installed')
       else: 
         if not os.path.exists('C:\\ProgramData\\Vormetric\\DataSecurityExpert\\agent\\vmd\\pem\\agent.pem'):	  
+          VM_DNS = get_VM_DNS(platform.system())
           os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\shared\\bin')
           execution_command = 'register_host.exe -vmd -agent=' + VM_DNS + ' ' + SERVER_DNS + ' -silent'
           logging.info('Register Vormetric Agent: ' + execution_command)

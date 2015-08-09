@@ -33,22 +33,59 @@ class vormetric::agent::windows::install (
 
     #create management folder
 	$vm_management_folder = "C:/btconfig"
+	$agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
 	
-	file { "$vm_management_folder":
-	  ensure => directory, 
-      mode   => '0777',
-      owner  => 'Administrator',
-      group  => 'Administrators',
-    }	
+	if $vormetric::params::files_existed == "true" {
+	
+	  file { "$vm_management_folder":
+	    ensure => directory, 
+        mode   => '0777',
+        owner  => 'Administrator',
+        group  => 'Administrators',
+      }	
   
-    #download python code
-    file { "$vm_management_folder/vormetric_agent_management.py":
-	  ensure  => file,
-      mode    => '0777',
-      owner   => 'Administrator',
-      group   => 'Administrators',      
-      source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
-      require => File["$vm_management_folder"],
-    }
+      #download python code
+      file { "$vm_management_folder/vormetric_agent_management.py":
+	    ensure  => file,
+        mode    => '0777',
+        owner   => 'Administrator',
+        group   => 'Administrators',      
+        source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
+        require => File["$vm_management_folder"],
+      }
+	  
+	  case $vormetric::params::vm_state{      
+	    'subscribed':{
+	      exec { "vormetric_service_subscription":
+		    cwd     => "$vm_management_folder",
+            path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
+            creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
+	        command => "python vormetric_agent_management.py subscribe",
+            require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
+	      }
+	    }
+	
+	    'registered':{
+	      exec { "vormetric_agent_installation":
+		    cwd     => "$vm_management_folder",
+            path    => "C:/Python27",
+		    creates => "C:/Program Files/Vormetric/DataSecurityExpert/agent/vmd/bin/vmd.exe",
+	        command => "python vormetric_agent_management.py install $agent_download_url $vormetric::params::host_ip $vormetric::params::host_dns",
+            require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]],
+	      }
+		  
+		  exec { "vormetric_agent_configuration":
+		    cwd     => "$vm_management_folder",
+		    path    => "C:/Python27",
+		    creates => "C:/ProgramData/Vormetric/DataSecurityExpert/agent/vmd/pem/agent.pem",
+		    command => "python vormetric_agent_management.py register $vormetric::params::host_dns",
+		    require => [Exec["vormetric_agent_installation"]],
+          }
+        }	
+      }
+	}
+	else{
+	  #TODO for service un-subscription
+	}	  
   #}
 }
