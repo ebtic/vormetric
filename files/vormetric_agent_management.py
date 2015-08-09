@@ -269,12 +269,10 @@ def generate_installation_command(operating_system):
 #*************************************************
 def get_VM_DNS(operating_system):  
   if operating_system == 'Windows':
-    process = os.popen('facter -p findstr appstack_server_identifier')
-    stdout = process.read()
-    vm_id = stdout.split('=>')[1].strip()
-    process = os.popen('facter -p findstr domain')
-    stdout = process.read()  
-    domain = stdout.split('=>')[1].strip()
+    process = os.popen('facter -p appstack_server_identifier')
+    vm_id = process.read().strip()
+    process = os.popen('facter -p domain')
+    domain = process.read().strip()
     vm_dns = '%s.%s' %(vm_id, domain)   
     return vm_dns
   else: 
