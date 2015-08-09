@@ -179,7 +179,7 @@ def generate_download_URL():
   if platform.system() == 'Windows':
     download_URL = download_URL + '&distribution=N/A' 
     #platform.architecture()[0] == '64bit' does not work if python 32bit is used
-    if '(x86)' in os.environ['PROGRAMFILES']: 
+    if platform.architecture()[0] == '64bit' or '(x86)' in os.environ['PROGRAMFILES']: 
       download_URL = download_URL + '&architecture=64bit'
     else:
       download_URL = download_URL + '&architecture=32bit'
