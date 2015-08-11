@@ -273,6 +273,8 @@ def get_VM_DNS(operating_system):
     process = os.popen('facter -p domain')
     domain = process.read().strip()
     vm_dns = '%s.%s' %(vm_id, domain)   
+    if len(vm_dns) > 54:
+      vm_dns = vm_dns[9:]
     return vm_dns
   else: 
     process = os.popen('facter -p | grep -w appstack_server_identifier')
@@ -282,7 +284,9 @@ def get_VM_DNS(operating_system):
     stdout = process.read()  
     domain = stdout.split('=>')[1].strip()
     vm_dns = '%s.%s' %(vm_id, domain)   
-    return vm_dns
+    if len(vm_dns) > 54:
+      vm_dns = vm_dns[9:]
+    return vm_dns 
      
 #*************************************************
 
