@@ -270,9 +270,9 @@ def get_VM_DNS(operating_system):
   if operating_system == 'Windows':
     #stdout = os.popen('facter -p appstack_server_identifier')
     #vm_id = stdout.read().strip()
-    process = os.popen('facter -p findstr appstack_server_identifier')
+    process = os.popen('facter -p appstack_server_identifier')
     stdout = process.read()
-    vm_id = stdout.split('=>')[1].strip()
+    vm_id = stdout.strip()
     #process = os.popen('facter -p domain')
     domain = process.read().strip()
     vm_dns = '%s.%s' %(vm_id, domain)   
