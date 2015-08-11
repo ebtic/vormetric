@@ -274,8 +274,8 @@ def get_VM_DNS(operating_system):
     process = os.popen('facter -p appstack_server_identifier')
     stdout = process.read()
     vm_id = stdout.strip()
-    #process = os.popen('facter -p domain')
-    domain = process.read().strip()
+    process = os.popen('facter -p findstr domain')
+    domain = process.read()
     vm_dns = '%s.%s' %(vm_id, domain)   
     if len(vm_dns) > 54:
       vm_dns = vm_dns[9:]
