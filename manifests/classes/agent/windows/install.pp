@@ -58,8 +58,8 @@ class vormetric::agent::windows::install (
 	    'subscribed':{
 	      exec { "vormetric_service_subscription":
 		    cwd     => "$vm_management_folder",
-            path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
-            creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
+            path    => "C:/Python27",
+            creates => "C:/Program Files/Vormetric/DataSecurityExpert/agent/vmd/bin/vmd.exe",
 	        command => "python vormetric_agent_management.py subscribe",
             require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
 	      }
