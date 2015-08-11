@@ -268,6 +268,7 @@ def generate_installation_command(operating_system):
 #*************************************************
 def get_VM_DNS(operating_system):  
   if operating_system == 'Windows':
+    os.chdir('C:\\ProgramData\\PuppetLabs\\facter\\facts.d')
     #stdout = os.popen('facter -p appstack_server_identifier')
     #vm_id = stdout.read().strip()
     process = os.popen('facter -p appstack_server_identifier')
