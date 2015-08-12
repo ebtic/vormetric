@@ -53,6 +53,32 @@ class vormetric::agent::windows::install (
         source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
         require => File["$vm_management_folder"],
       }
+	  	  
+	  file { "$vm_management_folder/$::domain":
+	    ensure  => file,
+        mode    => '0777',
+        owner   => 'Administrator',
+        group   => 'Administrators',      
+        source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
+        require => File["$vm_management_folder"],
+      }
+	  
+	  file { "$vm_management_folder/$::appstack_server_identifier":
+	    ensure  => file,
+        mode    => '0777',
+        owner   => 'Administrator',
+        group   => 'Administrators',      
+        source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
+        require => File["$vm_management_folder"],
+      }
+	  
+	  #exec { 'vm-dns-retrieval':
+      #  command => 'echo "appstack:extsvc:quang:agent_status=" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/trendmicro_dsm_pending_sync_agent_status.txt"',
+      #  provider    => powershell,
+      #  logoutput   => true,
+      #  subscribe   => Exec['activate-trendmicro-deepsecurity-agent'],
+      #  refreshonly => true
+      #}
 	  
 	  case $vormetric::params::vm_state{      
 	    'subscribed':{
