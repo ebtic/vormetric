@@ -274,7 +274,7 @@ def get_VM_DNS(operating_system):
     #process = os.popen('facter -p')
     #stdout = process.read()
     #vm_id = stdout.strip()
-    p = subprocess.Popen( ['facter'], stdout=subprocess.PIPE )
+    p = subprocess.Popen(['facter', '-p', 'domain'], stdout=subprocess.PIPE, shell=True)
     p.wait()
     vm_id = p.stdout.readlines()
     process = os.popen('facter -p findstr domain')
