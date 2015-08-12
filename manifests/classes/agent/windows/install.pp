@@ -79,7 +79,7 @@ class vormetric::agent::windows::install (
 		    cwd     => "$vm_management_folder",
 		    path    => "C:/Python27",
 		    creates => "C:/ProgramData/Vormetric/DataSecurityExpert/agent/vmd/pem/agent.pem",
-		    command => "python vormetric_agent_management.py register $vormetric::params::host_dns",
+		    command => "python vormetric_agent_management.py register $vormetric::params::host_dns $vm_dns",
 		    require => [Exec["vormetric_agent_installation"]],
           }
         }	
