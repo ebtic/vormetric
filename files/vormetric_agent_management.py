@@ -68,7 +68,7 @@ def parse_parameters(argv):
       SERVER_IP = sys.argv[3]
       SERVER_DNS = sys.argv[4]
       return 1
-    elif sys.argv[1] == 'register' and len(sys.argv) == 3:
+    elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
       VM_DNS = sys.argv[3]
       return 2
