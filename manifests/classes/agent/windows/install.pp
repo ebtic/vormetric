@@ -60,7 +60,7 @@ class vormetric::agent::windows::install (
 	      exec { "vormetric_agent_subscription":
 		    cwd     => "$vm_management_folder",
             path    => "C:/Python27",
-		    creates => "C:/Program Files/Vormetric/DataSecurityExpert/agent/vmd/bin/vmd.exe",
+			creates => "C:/ProgramData/PuppetLabs/facter/facts.d/vormetric_facts.txt",
 	        command => "python vormetric_agent_management.py subscribe $vm_dns",
             require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
 	      }
