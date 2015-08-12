@@ -71,6 +71,8 @@ def parse_parameters(argv):
     elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
       VM_DNS = sys.argv[3]
+      if len(VM_DNS) > 54:
+        VM_DNS = VM_DNS[9:]
       return 2
     elif sys.argv[1] == 'encrypt' and len(sys.argv) == 3:
       GUARD_POINT = sys.argv[2]
