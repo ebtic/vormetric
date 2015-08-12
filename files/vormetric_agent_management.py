@@ -372,7 +372,6 @@ if __name__ == "__main__":
         logging.info('Vormetric agent has not been installed')
       else: 
         if not os.path.exists('C:\\ProgramData\\Vormetric\\DataSecurityExpert\\agent\\vmd\\pem\\agent.pem'):	  
-          VM_DNS = get_VM_DNS(platform.system())
           os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\shared\\bin')
           execution_command = 'register_host.exe -vmd -agent=' + VM_DNS + ' ' + SERVER_DNS + ' -silent'
           logging.info('Register Vormetric Agent: ' + execution_command)
