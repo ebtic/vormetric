@@ -71,7 +71,7 @@ class vormetric::agent::windows::install (
 		    cwd     => "$vm_management_folder",
             path    => "C:/Python27",
 		    creates => "C:/Program Files/Vormetric/DataSecurityExpert/agent/vmd/bin/vmd.exe",
-	        command => "python vormetric_agent_management.py install $agent_download_url $vormetric::params::host_ip $vormetric::params::host_dns",
+	        command => "python vormetric_agent_management.py install $agent_download_url $vormetric::params::host_ip $vormetric::params::host_dns $vm_dns",
             require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
 	      }
 		  

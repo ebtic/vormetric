@@ -63,10 +63,13 @@ def parse_parameters(argv):
       if len(VM_DNS) > 54:
         VM_DNS = VM_DNS[9:]
       return 0
-    elif sys.argv[1] == 'install' and len(sys.argv) == 5:
+    elif sys.argv[1] == 'install' and len(sys.argv) == 6:
       AGENT_DOWNLOAD_URL = sys.argv[2]
       SERVER_IP = sys.argv[3]
       SERVER_DNS = sys.argv[4]
+      VM_DNS = sys.argv[5]
+      if len(VM_DNS) > 54:
+        VM_DNS = VM_DNS[9:]
       return 1
     elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
