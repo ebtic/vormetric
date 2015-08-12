@@ -34,7 +34,7 @@ class vormetric::agent::windows::install (
     #create management folder
 	$vm_management_folder = "C:/btconfig"
 	$agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
-	$vm_dns = "$::domain.$::appstack_server_identifier"
+	$vm_dns = "$::appstack_server_identifier.$::domain"
 	
 	if $vormetric::params::files_existed == "true" {
 	
@@ -55,29 +55,14 @@ class vormetric::agent::windows::install (
         require => File["$vm_management_folder"],
       }
 	  	  
-	  file { "$vm_management_folder/$vm_dns":
-	    ensure  => file,
-        mode    => '0777',
-        owner   => 'Administrator',
-        group   => 'Administrators',      
-        source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
-        require => File["$vm_management_folder"],
-      }
-	  
-	  exec { "vm-dns-facter-creation":
-		    command     => 'echo "appstack:extsvc:quang:agent_status=$installation.$vm_dns" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/quang_test.txt"',
-            provider    => powershell,
-            logoutput   => true,
-            refreshonly => true
-	  }
-	  
 	  case $vormetric::params::vm_state{      
 	    'subscribed':{
-	      exec { "vm-dns-facter-creation":
-		    command     => 'echo "appstack:extsvc:quang:agent_status=$installation.::domain.$::appstack_server_identifier" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/quang_test.txt"',
-            provider    => powershell,
-            logoutput   => true,
-            refreshonly => true
+	      exec { "vormetric_agent_subscription":
+		    cwd     => "$vm_management_folder",
+            path    => "C:/Python27",
+		    creates => "C:/Program Files/Vormetric/DataSecurityExpert/agent/vmd/bin/vmd.exe",
+	        command => "python vormetric_agent_management.py subscribe $vm_dns",
+            require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
 	      }
 	    }
 	

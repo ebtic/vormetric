@@ -53,11 +53,15 @@ def parse_parameters(argv):
   global SERVER_DNS
   global SERVER_IP
   global GUARD_POINT
+  global VM_DNS
 
   if len(sys.argv) == 1:    
     show_error('Error: parameters are required')
   else:
-    if sys.argv[1] == 'subscribe' and len(sys.argv) == 2:
+    if sys.argv[1] == 'subscribe' and len(sys.argv) == 3:
+      VM_DNS = sys.argv[2]
+      if len(VM_DNS) > 54:
+        VM_DNS = VM_DNS[9:]
       return 0
     elif sys.argv[1] == 'install' and len(sys.argv) == 5:
       AGENT_DOWNLOAD_URL = sys.argv[2]
@@ -66,6 +70,7 @@ def parse_parameters(argv):
       return 1
     elif sys.argv[1] == 'register' and len(sys.argv) == 3:
       SERVER_DNS = sys.argv[2]
+      VM_DNS = sys.argv[3]
       return 2
     elif sys.argv[1] == 'encrypt' and len(sys.argv) == 3:
       GUARD_POINT = sys.argv[2]
@@ -294,7 +299,6 @@ if __name__ == "__main__":
   #logging.info('Parameters: ' + AGENT_DOWNLOAD_URL + ',' + SERVER_DNS + ',' + SERVER_IP + ',' + VM_DNS)
 
   if running_mode == 0:     
-    VM_DNS = get_VM_DNS(platform.system())
     logging.info('Subscribed: DNS=' + VM_DNS) 
     update_facts('installation.' + VM_DNS, platform.system())
 
@@ -313,7 +317,6 @@ if __name__ == "__main__":
 
     #install Vormetric agent
     if os.path.exists(SETUP_FILE):
-      VM_DNS = get_VM_DNS(platform.system())
       execution_command = generate_installation_command(platform.system())
       logging.info('Install Vormetric Agent: ' + execution_command)
       if platform.system() == 'Windows':
