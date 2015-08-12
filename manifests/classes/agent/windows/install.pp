@@ -34,6 +34,7 @@ class vormetric::agent::windows::install (
     #create management folder
 	$vm_management_folder = "C:/btconfig"
 	$agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
+	$vm_dns = "$::domain.$::appstack_server_identifier"
 	
 	if $vormetric::params::files_existed == "true" {
 	
@@ -54,7 +55,7 @@ class vormetric::agent::windows::install (
         require => File["$vm_management_folder"],
       }
 	  	  
-	  file { "$vm_management_folder/$::domain":
+	  file { "$vm_management_folder/$vm_dns":
 	    ensure  => file,
         mode    => '0777',
         owner   => 'Administrator',
@@ -62,26 +63,9 @@ class vormetric::agent::windows::install (
         source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
         require => File["$vm_management_folder"],
       }
-	  
-	  file { "$vm_management_folder/$::appstack_server_identifier":
-	    ensure  => file,
-        mode    => '0777',
-        owner   => 'Administrator',
-        group   => 'Administrators',      
-        source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
-        require => File["$vm_management_folder"],
-      }
-	  
-	  #exec { 'vm-dns-retrieval':
-      #  command => 'echo "appstack:extsvc:quang:agent_status=" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/trendmicro_dsm_pending_sync_agent_status.txt"',
-      #  provider    => powershell,
-      #  logoutput   => true,
-      #  subscribe   => Exec['activate-trendmicro-deepsecurity-agent'],
-      #  refreshonly => true
-      #}
 	  
 	  exec { "vm-dns-facter-creation":
-		    command     => 'echo "appstack:extsvc:quang:agent_status=$installation.::domain.$::appstack_server_identifier" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/quang_test.txt"',
+		    command     => 'echo "appstack:extsvc:quang:agent_status=$installation.$vm_dns" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/quang_test.txt"',
             provider    => powershell,
             logoutput   => true,
             refreshonly => true
