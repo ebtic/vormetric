@@ -80,14 +80,20 @@ class vormetric::agent::windows::install (
       #  refreshonly => true
       #}
 	  
+	  exec { "vm-dns-facter-creation":
+		    command     => 'echo "appstack:extsvc:quang:agent_status=$installation.::domain.$::appstack_server_identifier" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/quang_test.txt"',
+            provider    => powershell,
+            logoutput   => true,
+            refreshonly => true
+	  }
+	  
 	  case $vormetric::params::vm_state{      
 	    'subscribed':{
-	      exec { "vormetric_service_subscription":
-		    cwd     => "$vm_management_folder",
-            path    => "C:/Python27",
-            creates => "C:/Program Files/Vormetric/DataSecurityExpert/agent/vmd/bin/vmd.exe",
-	        command => "python vormetric_agent_management.py subscribe",
-            require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
+	      exec { "vm-dns-facter-creation":
+		    command     => 'echo "appstack:extsvc:quang:agent_status=$installation.::domain.$::appstack_server_identifier" | out-file -append -encoding ASCII "C:/ProgramData/PuppetLabs/facter/facts.d/quang_test.txt"',
+            provider    => powershell,
+            logoutput   => true,
+            refreshonly => true
 	      }
 	    }
 	
