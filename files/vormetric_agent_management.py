@@ -342,7 +342,7 @@ if __name__ == "__main__":
             else:
               child.sendline('')
           child.expect(pexpect.EOF)
-          update_facts('ready', platform.system())
+          update_facts('running', platform.system())
         except pexpect.EOF:
           pass       
     else:
@@ -381,16 +381,16 @@ if __name__ == "__main__":
           execution_command = 'register_host.exe -vmd -agent=' + VM_DNS + ' ' + SERVER_DNS + ' -silent'
           logging.info('Register Vormetric Agent: ' + execution_command)
           os.system(execution_command)
+          update_facts('running', platform.system())
         else:
           logging.info('Vormetric Agent has been previously registered')	
-
+        
   elif running_mode == 3:
     logging.info('Run dataxform to encrypt data')
     if platform.system() == 'Windows':
       os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin')        
       execution_command = 'dataxform --rekey --nq --gp ' + GUARD_POINT
       logging.info('Command: ' + execution_command)
-      os.system(execution_command)
       process = subprocess.Popen(['dataxform', '--rekey', '--nq', '--gp', GUARD_POINT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       stdout, stderr = process.communicate()
       if stdout is not None:
@@ -406,27 +406,39 @@ if __name__ == "__main__":
         lines = stdout.split('\r\n')
         for line in lines:
           if line != '':
-            logging.info(line) 
+            logging.info(line)     
     else:
       execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform --rekey --nq --gp ' + GUARD_POINT      
       logging.info('Command: ' + execution_command)
       os.system(execution_command)
       execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform --cleanup --nq --gp ' + GUARD_POINT
       logging.info('Command: ' + execution_command)
-      os.system(execution_command)
-    #TODO: update facter
-    #call_ws(AGENT_DOWNLOAD_URL)
-
+      os.system(execution_command)    
+    #update facter
+    update_facts('running', platform.system())
+    
   elif running_mode == 4:
     logging.info('Run dataxform to decrypt data')
     if platform.system() == 'Windows':
       os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin')
       execution_command = 'dataxform --rekey --nq --gp ' + GUARD_POINT
       logging.info('Command: ' + execution_command)
-      os.system(execution_command)
+      process = subprocess.Popen(['dataxform', '--rekey', '--nq', '--gp', GUARD_POINT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      stdout, stderr = process.communicate()
+      if stdout is not None:
+        lines = stdout.split('\r\n')
+        for line in lines:
+          if line != '':
+            logging.info(line)       
       execution_command = 'dataxform --cleanup --nq --gp ' + GUARD_POINT
       logging.info('Command: ' + execution_command)
-      os.system(execution_command)
+      process = subprocess.Popen(['dataxform', '--cleanup', '--nq', '--gp', GUARD_POINT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      stdout, stderr = process.communicate()
+      if stdout is not None:
+        lines = stdout.split('\r\n')
+        for line in lines:
+          if line != '':
+            logging.info(line)
     else:
       execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --rekey --nq --gp ' + GUARD_POINT      
       logging.info('Command: ' + execution_command)
@@ -434,6 +446,6 @@ if __name__ == "__main__":
       execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --cleanup --nq --gp ' + GUARD_POINT
       logging.info('Command: ' + execution_command)
       os.system(execution_command)
-    #TODO: update facter
-    #call_ws(AGENT_DOWNLOAD_URL) 
+    #update facter
+    update_facts('running', platform.system()) 
 #*************************************************

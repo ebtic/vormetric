@@ -15,10 +15,11 @@ class vormetric::params {
   if $appcara::params::server {
     $svr_extsvc_option = $appcara::params::server["extension_service_option"]
     if $svr_extsvc_option {
-      $svr_vormetric_option = $svr_extsvc_option['vormetric']
+      $svr_vormetric_option = $svr_extsvc_option['vormetric']	  
       if $svr_vormetric_option {
 	    $vm_state = $svr_vormetric_option["vm_state"]
-		if $vm_state == "subscribed" or $vm_state == "registered" {
+		$guardpoint = $svr_vormetric_option["guardpoint"]
+		if $vm_state == "subscribed" or $vm_state == "registered" or $vm_state == "running" or $vm_state == "Encryption" or $vm_state == "Decryption"{
 		  $files_existed = "true"
 		}
 		else{
