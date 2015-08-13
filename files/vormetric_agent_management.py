@@ -415,7 +415,7 @@ if __name__ == "__main__":
       logging.info('Command: ' + execution_command)
       os.system(execution_command)    
     #update facter
-    update_facts('running', platform.system())
+    update_facts('encryption.' + GUARD_POINT, platform.system())
     
   elif running_mode == 4:
     logging.info('Run dataxform to decrypt data')
@@ -447,5 +447,5 @@ if __name__ == "__main__":
       logging.info('Command: ' + execution_command)
       os.system(execution_command)
     #update facter
-    update_facts('running', platform.system()) 
+    update_facts('decryption.' + GUARD_POINT, platform.system()) 
 #*************************************************
