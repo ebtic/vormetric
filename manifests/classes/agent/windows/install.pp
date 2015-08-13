@@ -89,7 +89,7 @@ class vormetric::agent::windows::install (
 		    cwd     => "$vm_management_folder",
 		    path    => "C:/Python27",
 			command => "python vormetric_agent_management.py encrypt $vormetric::params::guardpoint",
-            require => [Exec["vormetric_agent_configuration"]],
+            require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
 		  }
 		}
 		
@@ -98,7 +98,7 @@ class vormetric::agent::windows::install (
 		    cwd     => "$vm_management_folder",
 		    path    => "C:/Python27",
 			command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
-            require => [Exec["vormetric_agent_configuration"]],
+            require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
 		  }
 		}
       }
