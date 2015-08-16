@@ -23,6 +23,7 @@ SERVER_DNS           = 'NONE'
 SERVER_IP            = 'NONE'
 VM_DNS               = 'NONE'
 GUARD_POINT          = 'NONE' 
+GUARD_POINT_LIST     = []
 
 #other supporting parameters
 CONFIG_FOLDER        = 'NONE'
@@ -53,6 +54,7 @@ def parse_parameters(argv):
   global SERVER_DNS
   global SERVER_IP
   global GUARD_POINT
+  global GUARD_POINT_LIST
   global VM_DNS
 
   if len(sys.argv) == 1:    
@@ -80,8 +82,9 @@ def parse_parameters(argv):
     elif sys.argv[1] == 'encrypt' and len(sys.argv) == 3:
       GUARD_POINT = sys.argv[2]
       return 3
-    elif sys.argv[1] == 'decrypt' and len(sys.argv) == 3:
-      GUARD_POINT = sys.argv[2]
+    elif sys.argv[1] == 'decrypt' and len(sys.argv) >= 3:
+      for i in (2, len(sys.argv) - 1):
+        GUARD_POINT_LIST.append(sys.argv[i])
       return 4
     elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
       return 5
@@ -276,24 +279,6 @@ def generate_installation_command(operating_system):
 #*************************************************
 
 #*************************************************
-def get_VM_DNS(operating_system):  
-  if operating_system == 'Windows':
-    pass
-  else: 
-    process = os.popen('facter -p | grep -w appstack_server_identifier')
-    stdout = process.read()
-    vm_id = stdout.split('=>')[1].strip()   
-    process = os.popen('facter -p | grep -w domain')
-    stdout = process.read()  
-    domain = stdout.split('=>')[1].strip()
-    vm_dns = '%s.%s' %(vm_id, domain)   
-    if len(vm_dns) > 54:
-      vm_dns = vm_dns[9:]
-    return vm_dns 
-     
-#*************************************************
-
-#*************************************************
 #main program
 if __name__ == "__main__":
   running_mode = parse_parameters(sys.argv[1:])    
@@ -419,33 +404,38 @@ if __name__ == "__main__":
     
   elif running_mode == 4:
     logging.info('Run dataxform to decrypt data')
+    fact_value = 'decryption'    
     if platform.system() == 'Windows':
       os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin')
-      execution_command = 'dataxform --rekey --nq --gp ' + GUARD_POINT
-      logging.info('Command: ' + execution_command)
-      process = subprocess.Popen(['dataxform', '--rekey', '--nq', '--gp', GUARD_POINT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      stdout, stderr = process.communicate()
-      if stdout is not None:
-        lines = stdout.split('\r\n')
-        for line in lines:
-          if line != '':
-            logging.info(line)       
-      execution_command = 'dataxform --cleanup --nq --gp ' + GUARD_POINT
-      logging.info('Command: ' + execution_command)
-      process = subprocess.Popen(['dataxform', '--cleanup', '--nq', '--gp', GUARD_POINT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      stdout, stderr = process.communicate()
-      if stdout is not None:
-        lines = stdout.split('\r\n')
-        for line in lines:
-          if line != '':
-            logging.info(line)
+      for GUARD_POINT in GUARD_POINT_LIST:
+        execution_command = 'dataxform --rekey --nq --gp ' + GUARD_POINT
+        logging.info('Command: ' + execution_command)
+        process = subprocess.Popen(['dataxform', '--rekey', '--nq', '--gp', GUARD_POINT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        if stdout is not None:
+          lines = stdout.split('\r\n')
+          for line in lines:
+            if line != '':
+              logging.info(line)       
+        execution_command = 'dataxform --cleanup --nq --gp ' + GUARD_POINT
+        logging.info('Command: ' + execution_command)
+        process = subprocess.Popen(['dataxform', '--cleanup', '--nq', '--gp', GUARD_POINT], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        if stdout is not None:
+          lines = stdout.split('\r\n')
+          for line in lines:
+            if line != '':
+              logging.info(line)
+      fact_value = fact_value + "." + GUARD_POINT
     else:
-      execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --rekey --nq --gp ' + GUARD_POINT      
-      logging.info('Command: ' + execution_command)
-      os.system(execution_command)
-      execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --cleanup --nq --gp ' + GUARD_POINT
-      logging.info('Command: ' + execution_command)
-      os.system(execution_command)
+      for GUARD_POINT in GUARD_POINT_LIST:
+        execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --rekey --nq --gp ' + GUARD_POINT      
+        logging.info('Command: ' + execution_command)
+        os.system(execution_command)
+        execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --cleanup --nq --gp ' + GUARD_POINT
+        logging.info('Command: ' + execution_command)
+        os.system(execution_command)
+      fact_value = fact_value + "." + GUARD_POINT
     #update facter
-    update_facts('decryption.' + GUARD_POINT, platform.system()) 
+    update_facts(fact_value, platform.system()) 
 #*************************************************
