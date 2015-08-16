@@ -27,13 +27,15 @@ class vormetric::agent::linux::install() {
 	
 	case $vormetric::params::vm_state{      
 	  'subscribed':{
-	    exec { "vormetric_service_subscription":
-		  cwd     => "$vm_management_folder",
-          path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
-          creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
-	      command => "python vormetric_agent_management.py subscribe $vm_dns",
-          require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
-	    }
+	    unless "mgmt.appcara.com" in $vm_dns { 
+	      exec { "vormetric_service_subscription":
+		    cwd     => "$vm_management_folder",
+            path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
+            creates => "/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd",         
+	        command => "python vormetric_agent_management.py subscribe $vm_dns",
+            require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
+	      }
+		}
 	  }
 	
 	  'registered':{
