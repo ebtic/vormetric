@@ -21,10 +21,10 @@ class vormetric::agent::linux::install() {
       require => File["$vm_management_folder"],
     }
 	
-	file { "${vm_management_folder}/puppet_params.log":
+	exec { "puppet_params_log_creation":
 	  command => 'echo "vm_state: ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}" > /btconfig/puppet_params.log',
       cwd     => '/btconfig',      
-	  require => File["$vm_management_folder"],
+	  refreshonly => true,
 	}
 	
 	case $vormetric::params::vm_state{      
