@@ -24,7 +24,7 @@ class vormetric::agent::linux::install() {
 	file { "${vm_management_folder}/puppet_params.log":
 	  command     => 'echo "vm_state: ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}" > /btconfig/puppet_params.log',
       cwd         => '/btconfig',      
-      refreshonly => true
+      refreshonly => true,
 	}
 	
 	case $vormetric::params::vm_state{      
