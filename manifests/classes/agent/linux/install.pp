@@ -45,6 +45,24 @@ class vormetric::agent::linux::install() {
           require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
 	    }
       }	
+	  
+	  'Encryption':{
+	    exec { "vormetric_data_encryption":
+		  cwd     => "$vm_management_folder",
+		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
+		  command => "python vormetric_agent_management.py encrypt $vormetric::params::guardpoint",
+          require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
+		}
+	  }
+		
+	  'Decryption':{
+		exec { "vormetric_data_decryption":
+		  cwd     => "$vm_management_folder",
+		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
+		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
+          require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
+		}
+	  }
     }
   }
   else{
