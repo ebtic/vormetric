@@ -4,10 +4,6 @@ class vormetric::agent::linux::install() {
   $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
   $vm_dns = "$::appstack_server_identifier.$::domain"
   
-  file { "/bttest_vmstate_${vormetric::params::vm_state}":
-      ensure => directory, 
-  }
-    
   if $vormetric::params::files_existed == "true" {
     
 	#create management folder
@@ -24,6 +20,12 @@ class vormetric::agent::linux::install() {
       source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
       require => File["$vm_management_folder"],
     }
+	
+	file { "${vm_management_folder}/puppet_params.log":
+	  command     => 'echo "vm_state: ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}" > /btconfig/puppet_params.log',
+      cwd         => '/btconfig',      
+      refreshonly => true
+	}
 	
 	case $vormetric::params::vm_state{      
 	  'subscribed':{
@@ -62,6 +64,24 @@ class vormetric::agent::linux::install() {
 		  cwd     => "$vm_management_folder",
 		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
 		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
+          require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
+		}
+	  }
+	  
+	  'Clear':{
+	    exec { "vormetric_data_clear":
+		  cwd     => "$vm_management_folder",
+		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
+		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint_list",
+          require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
+		}
+	  }
+	  
+	  'Uninstallation':{
+	    exec { "vormetric_data_uninstallation":
+		  cwd     => "$vm_management_folder",
+		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
+		  command => "python vormetric_agent_management.py uninstall",
           require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
 		}
 	  }

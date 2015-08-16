@@ -86,7 +86,7 @@ def parse_parameters(argv):
       for i in (2, len(sys.argv) - 1):
         GUARD_POINT_LIST.append(sys.argv[i])
       return 4
-    elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
+    elif sys.argv[1] == 'uninstall' and len(sys.arg) == 2:
       return 5
     elif sys.argv[1] == 'help':
       show_usage()
