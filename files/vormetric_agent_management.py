@@ -426,7 +426,7 @@ if __name__ == "__main__":
           for line in lines:
             if line != '':
               logging.info(line)
-      fact_value = fact_value + "." + GUARD_POINT
+        fact_value = fact_value + "." + GUARD_POINT
     else:
       for GUARD_POINT in GUARD_POINT_LIST:
         execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --rekey --nq --gp ' + GUARD_POINT      
@@ -435,7 +435,7 @@ if __name__ == "__main__":
         execution_command = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/dataxform/dataxform --cleanup --nq --gp ' + GUARD_POINT
         logging.info('Command: ' + execution_command)
         os.system(execution_command)
-      fact_value = fact_value + "." + GUARD_POINT
+        fact_value = fact_value + "." + GUARD_POINT
     #update facter
     update_facts(fact_value, platform.system()) 
 #*************************************************
