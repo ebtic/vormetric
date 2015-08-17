@@ -47,23 +47,76 @@ def show_error(error_message):
   sys.exit(2)
 #*************************************************
 
-#parse input parameters to determine running mode
+#*************************************************
+def get_previous_command(command_file):
+  try:
+    cfile = open(command_file, 'r')
+    command = cfile.readline()
+    cfile.close()
+    return command
+  except:
+    return 'NONE'
+#*************************************************
+
+#*************************************************
+def update_command(command_file, command):
+  cfile = open(command_file, "w")
+  cfile.write(command)
+  cfile.close()
+#*************************************************
+
+#set variables and parse inputs to determine running mode
 #*************************************************
 def parse_parameters(argv):
+  global CONFIG_FOLDER
+  global AGENT_FILE
+  global TMP_FOLDER
+  global LOG_FILE
+  global SETUP_FILE
+  global HOSTS_FILE
   global AGENT_DOWNLOAD_URL  
   global SERVER_DNS
   global SERVER_IP
   global GUARD_POINT
   global GUARD_POINT_LIST
   global VM_DNS
+  
+  #set variables
+  if platform.system() == 'Windows':
+    CONFIG_FOLDER = 'C:\\btconfig'
+    LOG_FILE = CONFIG_FOLDER + '\\btconfig.log'
+    COMMAND_FILE = CONFIG_FOLDER + '\\command.log'
+    AGENT_FILE = 'C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin\\vmd.exe'
+    HOSTS_FILE = 'C:\\Windows\\System32\\drivers\\etc\\hosts'
+    TMP_FOLDER = 'C:\\tmpdir'
+    SETUP_FILE = TMP_FOLDER + '\\fsagent.msi'
+    if not (os.path.exists(TMP_FOLDER)):
+      os.mkdir(TMP_FOLDER)    
+  else:
+    CONFIG_FOLDER = '/btconfig'   
+    LOG_FILE = CONFIG_FOLDER + '/btconfig.log'
+    COMMAND_FILE = CONFIG_FOLDER + '/command.log'
+    AGENT_FILE = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd'
+    SETUP_FILE = CONFIG_FOLDER + '/veefs.bin'
+    HOSTS_FILE = '/etc/hosts'
+    props_filename = CONFIG_FOLDER + '/general.properties'
+  
+  #get previous command
+  pre_command = get_previous_command(COMMAND_FILE)
 
+  #parse inputs
   if len(sys.argv) == 1:    
     show_error('Error: parameters are required')
   else:
     if sys.argv[1] == 'subscribe' and len(sys.argv) == 3:
-      VM_DNS = sys.argv[2]
-      if len(VM_DNS) > 54:
-        VM_DNS = VM_DNS[9:]
+      if pre_command == 'subscribe':      
+        #to avoid duplication in running the command
+        return 99
+      else:
+        VM_DNS = sys.argv[2]
+        if len(VM_DNS) > 54:
+          VM_DNS = VM_DNS[9:]
+        update_command(COMMAND_FILE, 'subscribe')
       return 0
     elif sys.argv[1] == 'install' and len(sys.argv) == 6:
       AGENT_DOWNLOAD_URL = sys.argv[2]
@@ -72,7 +125,7 @@ def parse_parameters(argv):
       VM_DNS = sys.argv[5]
       if len(VM_DNS) > 54:
         VM_DNS = VM_DNS[9:]
-      return 1
+      return 1        
     elif sys.argv[1] == 'register' and len(sys.argv) == 4:
       SERVER_DNS = sys.argv[2]
       VM_DNS = sys.argv[3]
@@ -81,24 +134,31 @@ def parse_parameters(argv):
       return 2
     elif sys.argv[1] == 'encrypt' and len(sys.argv) == 3:
       GUARD_POINT = sys.argv[2]
-      return 3
+      command = 'encrypt ' + GUARD_POINT
+      if pre_command == command:
+        return 99
+      else:
+        update_command(COMMAND_FILE, command)
+        return 3
     elif sys.argv[1] == 'decrypt' and len(sys.argv) >= 3:
+      command = 'decrypt'
       for i in (2, len(sys.argv) - 1):
         GUARD_POINT_LIST.append(sys.argv[i])
-      return 4
+        command = command + ' ' + sys.argv[i]
+      if pre_command == command:
+        return 99
+      else
+        update_command(COMMAND_FILE, command)
+        return 4
     elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
-      return 5
+      if pre_command == 'uninstall':
+        return 99
+      else:
+        update_command(COMMAND_FILE, command)
+        return 5
     elif sys.argv[1] == 'help':
       show_usage()
-      sys.exit(0)
-    elif sys.argv[1] == 'test':
-      if len(sys.argv) > 2:
-        AGENT_DOWNLOAD_URL = sys.argv[2]
-      if len(sys.argv) > 3:
-        SERVER_DNS = sys.argv[3]
-      if len(sys.argv) > 4:
-        SERVER_IP = sys.argv[4]	
-      return 6	
+      sys.exit(0)	
     else:
       show_error('Incorrect parameters')
 #*************************************************
@@ -114,34 +174,6 @@ def update_linux_lib():
     os.system('yum install -y pexpect')
   elif 'CentOS' in distribution:
     os.system('yum install -y pexpect')
-#*************************************************
-
-#*************************************************
-#read general information	
-def set_variables():
-  global CONFIG_FOLDER
-  global AGENT_FILE
-  global TMP_FOLDER
-  global LOG_FILE
-  global SETUP_FILE
-  global HOSTS_FILE
-
-  if platform.system() == 'Windows':
-    CONFIG_FOLDER = 'C:\\btconfig'
-    LOG_FILE = CONFIG_FOLDER + '\\btconfig.log'
-    AGENT_FILE = 'C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin\\vmd.exe'
-    HOSTS_FILE = 'C:\\Windows\\System32\\drivers\\etc\\hosts'
-    TMP_FOLDER = 'C:\\tmpdir'
-    SETUP_FILE = TMP_FOLDER + '\\fsagent.msi'
-    if not (os.path.exists(TMP_FOLDER)):
-      os.mkdir(TMP_FOLDER)    
-  else:
-    CONFIG_FOLDER = '/btconfig'
-    LOG_FILE = CONFIG_FOLDER + '/btconfig.log'
-    AGENT_FILE = '/opt/vormetric/DataSecurityExpert/agent/vmd/bin/vmd'
-    SETUP_FILE = CONFIG_FOLDER + '/veefs.bin'
-    HOSTS_FILE = '/etc/hosts'
-    props_filename = CONFIG_FOLDER + '/general.properties'
 #*************************************************
 
 #*************************************************
@@ -279,10 +311,14 @@ def generate_installation_command(operating_system):
 #*************************************************
 
 #*************************************************
+def check_duplication(file, command, param):
+  file = "
+#*************************************************
+
+#*************************************************
 #main program
 if __name__ == "__main__":
   running_mode = parse_parameters(sys.argv[1:])    
-  set_variables()  
   
   #open log file
   logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='[%m/%d/%y, %H:%M:%S]',)  
