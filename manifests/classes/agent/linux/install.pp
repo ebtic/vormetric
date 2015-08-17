@@ -6,7 +6,9 @@ class vormetric::agent::linux::install() {
   
   notify {"vm_state ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}":}
   $vormetric::params::guardpoint_list.each |$guardpoint| {
-    notify {"guardpoint ${guardpoint}:}
+    file { "${vm_management_folder}${guardpoint}":
+      ensure => directory, 
+    }
   }
   
   
