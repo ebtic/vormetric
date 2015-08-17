@@ -5,7 +5,7 @@ class vormetric::agent::linux::install() {
   $vm_dns = "$::appstack_server_identifier.$::domain"
   
   notify {"vm_state ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}":}
-  $vormetric::params::guardpoint_list.each|$guardpoint| {
+  $vormetric::params::guardpoint_list.each |$guardpoint| {
     notify {"guardpoint ${guardpoint}:}
   }
   
