@@ -154,7 +154,7 @@ def parse_parameters(argv):
       if pre_command == 'uninstall':
         return 99
       else:
-        update_command(COMMAND_FILE, command)
+        update_command(COMMAND_FILE, 'uninstall')
         return 5
     elif sys.argv[1] == 'help':
       show_usage()
