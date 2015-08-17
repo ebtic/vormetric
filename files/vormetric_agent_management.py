@@ -147,7 +147,7 @@ def parse_parameters(argv):
         command = command + ' ' + sys.argv[i]
       if pre_command == command:
         return 99
-      else
+      else:
         update_command(COMMAND_FILE, command)
         return 4
     elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
