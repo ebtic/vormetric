@@ -5,12 +5,6 @@ class vormetric::agent::linux::install() {
   $vm_dns = "$::appstack_server_identifier.$::domain"
   
   notify {"vm_state ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}":}
-  $vormetric::params::guardpoint_list.each |$guardpoint| {
-    file { "${vm_management_folder}${guardpoint}":
-      ensure => directory, 
-    }
-  }
-  
   
   if $vormetric::params::files_existed == "true" {
     
@@ -79,7 +73,7 @@ class vormetric::agent::linux::install() {
 	    exec { "vormetric_data_clear":
 		  cwd     => "$vm_management_folder",
 		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
-		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint_list",
+		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
           require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
 		}
 	  }
