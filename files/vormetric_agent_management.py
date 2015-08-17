@@ -353,6 +353,7 @@ if __name__ == "__main__":
         child.expect(pexpect.EOF)
       except pexpect.EOF:
         pass
+    update_facts('uninstallation.', platform.system())
 
   elif running_mode == 2:
     if os.path.exists(CONFIG_FOLDER + '\\waitforrestart'):

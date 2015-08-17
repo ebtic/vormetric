@@ -4,7 +4,8 @@ class vormetric::agent::linux::install() {
   $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
   $vm_dns = "$::appstack_server_identifier.$::domain"
   
-  notify {"vm_state ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}":}
+  #for testing purpose
+  #notify {"vm_state ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}":}
   
   if $vormetric::params::files_existed == "true" {
     
@@ -22,11 +23,6 @@ class vormetric::agent::linux::install() {
       source  => "puppet:///modules/vormetric/vormetric_agent_management.py",
       require => File["$vm_management_folder"],
     }
-	
-	#exec { "puppet_params_log_creation":
-	#  command => 'echo "vm_state: ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}" > /btconfig/puppet_params.log',
-    #  cwd     => '/btconfig',      
-	#}
 	
 	case $vormetric::params::vm_state{      
 	  'subscribed':{
@@ -90,5 +86,9 @@ class vormetric::agent::linux::install() {
   }
   else{
     #TODO for service un-subscription 
+	#remove python code
+    file { "${vm_management_folder}/vormetric_agent_management.py":
+      ensure  => absent,
+    }
   } 
 }

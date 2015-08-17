@@ -19,7 +19,7 @@ class vormetric::params {
       if $svr_vormetric_option {
 	    $vm_state = $svr_vormetric_option["vm_state"]
 		$guardpoint = $svr_vormetric_option["guardpoint"]
-		if $vm_state == "subscribed" or $vm_state == "registered" or $vm_state == "running" or $vm_state == "Encryption" or $vm_state == "Decryption" or $vm_state == "Clear" {
+		if $vm_state == "subscribed" or $vm_state == "registered" or $vm_state == "running" or $vm_state == "Encryption" or $vm_state == "Decryption" or $vm_state == "Clear" or $vm_state == "Uninstallation" {
 		  $files_existed = "true"
 		}
 		else{
