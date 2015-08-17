@@ -311,11 +311,6 @@ def generate_installation_command(operating_system):
 #*************************************************
 
 #*************************************************
-def check_duplication(file, command, param):
-  file = "
-#*************************************************
-
-#*************************************************
 #main program
 if __name__ == "__main__":
   running_mode = parse_parameters(sys.argv[1:])    
