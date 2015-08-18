@@ -403,7 +403,7 @@ if __name__ == "__main__":
           logging.info('Vormetric Agent has been previously registered')	
         
   elif running_mode == 3:
-    logging.info('Run dataxform to encrypt data')
+    logging.info('Run dataxform to encrypt data ' + GUARD_POINT)
     if platform.system() == 'Windows':
       os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin')        
       execution_command = 'dataxform --rekey --nq --gp ' + GUARD_POINT
@@ -435,7 +435,7 @@ if __name__ == "__main__":
     update_facts('encryption.' + GUARD_POINT, platform.system())
     
   elif running_mode == 4:
-    logging.info('Run dataxform to decrypt data')
+    logging.info('Run dataxform to decrypt data ' + ' '.join(GUARD_POINT_LIST))
     fact_value = 'decryption'    
     if platform.system() == 'Windows':
       os.chdir('C:\\Program Files\\Vormetric\\DataSecurityExpert\\agent\\vmd\\bin')
