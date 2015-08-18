@@ -142,8 +142,7 @@ def parse_parameters(argv):
         return 3
     elif sys.argv[1] == 'decrypt' and len(sys.argv) >= 3:
       command = 'decrypt'
-      GUARD_POINT_LIST = []
-      for i in (2, len(sys.argv) - 1):
+      for i in range(2, len(sys.argv)):
         GUARD_POINT_LIST.append(sys.argv[i])
         command = command + ' ' + sys.argv[i]
       if pre_command == command:
