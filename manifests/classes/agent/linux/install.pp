@@ -5,7 +5,7 @@ class vormetric::agent::linux::install() {
   $vm_dns = "$::appstack_server_identifier.$::domain"
   
   #for testing purpose
-  notify {"vm_state ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}":}
+  notify {"vm_state ${vormetric::params::vm_state}, vm_dns: ${vm_dns}, guardpoint_list: ${vormetric::params::guardpoint_list}, account_state: ${vormetric::params::account_state}":}
   
   if $vormetric::params::files_existed == "true" {
     
