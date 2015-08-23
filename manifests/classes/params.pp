@@ -17,7 +17,7 @@ class vormetric::params {
     if $acct_extsvc_option {
       $acct_vormetric_option = $acct_extsvc_option['vormetric']
       if $acct_vormetric_option {
-        $account_state = $acct_vormetric_option["state"] # 'ACTIVE', in general        
+        $account_state = $acct_vormetric_option["state"] # 'ACTIVE', in general      		
       }
   	  else {
   	    $account_state = "DISABLE"
@@ -30,7 +30,11 @@ class vormetric::params {
     if $svr_extsvc_option {
       $svr_vormetric_option = $svr_extsvc_option['vormetric']	  
       if $svr_vormetric_option {
-	    if $account_state == "DISABLE" {
+	    if $account_state == "ACTIVE" {
+		  $vm_state = $svr_vormetric_option["vm_state"]
+		  $guardpoint = $svr_vormetric_option["guardpoint"]
+		}
+	    else {		  
 		  $guardpoint = $svr_vormetric_option["guardpoint_list_desc"]
 		  if $guardpoint == "" {
 		    $vm_state = "Uninstallation"
@@ -38,10 +42,6 @@ class vormetric::params {
 		  else {
 		    $vm_state = "Clear"
 		  }
-		}
-	    else {
-		  $vm_state = $svr_vormetric_option["vm_state"]
-		  $guardpoint = $svr_vormetric_option["guardpoint"]
 		}
 		
 		if $vm_state == "subscribed" or $vm_state == "registered" or $vm_state == "running" or $vm_state == "Encryption" or $vm_state == "Decryption" or $vm_state == "Clear" or $vm_state == "Uninstallation" {
