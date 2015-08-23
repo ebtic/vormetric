@@ -1,4 +1,4 @@
 class vormetric::agent::linux::config() {
 
-  #Do nothing
+  #Do nothing, reserved!
 }
