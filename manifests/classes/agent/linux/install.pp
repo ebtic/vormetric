@@ -60,7 +60,7 @@ class vormetric::agent::linux::install() {
 		exec { "vormetric_data_decryption":
 		  cwd     => "$vm_management_folder",
 		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
-		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
+		  command => "python vormetric_agent_management.py decrypt update $vormetric::params::guardpoint",
           require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
 		}
 	  }
@@ -69,7 +69,7 @@ class vormetric::agent::linux::install() {
 	    exec { "vormetric_data_clear":
 		  cwd     => "$vm_management_folder",
 		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
-		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
+		  command => "python vormetric_agent_management.py decrypt update $vormetric::params::guardpoint",
           require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
 		}
 	  }
@@ -87,7 +87,7 @@ class vormetric::agent::linux::install() {
 	    exec { "vormetric_data_decryption":
 		  cwd     => "$vm_management_folder",
 		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
-		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
+		  command => "python vormetric_agent_management.py decrypt noupdate $vormetric::params::guardpoint",
           require => [File["${vm_management_folder}/vormetric_agent_management.py"]],
 		}
 		

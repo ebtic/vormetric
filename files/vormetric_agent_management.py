@@ -24,6 +24,7 @@ SERVER_IP            = 'NONE'
 VM_DNS               = 'NONE'
 GUARD_POINT          = 'NONE' 
 GUARD_POINT_LIST     = []
+DECRYPT_UPDATE_FLAG  = 'NONE'
 
 #other supporting parameters
 CONFIG_FOLDER        = 'NONE'
@@ -79,6 +80,7 @@ def parse_parameters(argv):
   global SERVER_IP
   global GUARD_POINT
   global GUARD_POINT_LIST
+  global DECRYPT_UPDATE_FLAG
   global VM_DNS
   
   #set variables
@@ -140,15 +142,17 @@ def parse_parameters(argv):
       else:
         update_command(COMMAND_FILE, command)
         return 3
-    elif sys.argv[1] == 'decrypt' and len(sys.argv) >= 3:
+    elif sys.argv[1] == 'decrypt' and len(sys.argv) >= 4:
+      DECRYPT_UPDATE_FLAG = sys.argv[2]
       command = 'decrypt'
-      for i in range(2, len(sys.argv)):
+      for i in range(3, len(sys.argv)):
         GUARD_POINT_LIST.append(sys.argv[i])
         command = command + ' ' + sys.argv[i]
       if pre_command == command:
         return 99
       else:
-        update_command(COMMAND_FILE, command)
+        if DECRYPT_UPDATE_FLAG == 'update':
+          update_command(COMMAND_FILE, command)
         return 4
     elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
       if pre_command == 'uninstall':
@@ -469,5 +473,6 @@ if __name__ == "__main__":
         os.system(execution_command)
         fact_value = fact_value + "." + GUARD_POINT
     #update facter
-    update_facts(fact_value, platform.system()) 
+    if DECRYPT_UPDATE_FLAG == 'update':
+      update_facts(fact_value, platform.system()) 
 #*************************************************
