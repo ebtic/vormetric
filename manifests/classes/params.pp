@@ -36,15 +36,15 @@ class vormetric::params {
 		}
 	    else {		  
 		  $guardpoint = $svr_vormetric_option["guardpoint_list_desc"]
-		  if $guardpoint == "" {
+		  if $guardpoint == ""{
 		    $vm_state = "Uninstallation"
 		  }
-		  else {
-		    $vm_state = "Clear"
+		  else{
+		    $vm_state = "Unsubscription"		  
 		  }
 		}
 		
-		if $vm_state == "subscribed" or $vm_state == "registered" or $vm_state == "running" or $vm_state == "Encryption" or $vm_state == "Decryption" or $vm_state == "Clear" or $vm_state == "Uninstallation" {
+		if $vm_state == "subscribed" or $vm_state == "registered" or $vm_state == "running" or $vm_state == "Encryption" or $vm_state == "Decryption" or $vm_state == "Clear" or $vm_state == "Uninstallation" or $vm_state == "Unsubscription" {
 		  $files_existed = "true"
 		}
 		else{
