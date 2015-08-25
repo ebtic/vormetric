@@ -151,8 +151,12 @@ def parse_parameters(argv):
       if pre_command == command:
         return 99
       else:
-        if DECRYPT_UPDATE_FLAG == 'update':
+        if DECRYPT_UPDATE_FLAG == 'update': 
           update_command(COMMAND_FILE, command)
+        else:
+          #DECRYPT_UPDATE_FLAG == 'noupdate'
+          if pre_command = 'uninstall':
+            return 99  
         return 4
     elif sys.argv[1] == 'uninstall' and len(sys.argv) == 2:
       if pre_command == 'uninstall':
