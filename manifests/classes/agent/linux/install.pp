@@ -84,7 +84,7 @@ class vormetric::agent::linux::install() {
 	  }
 	  
 	  'Unsubscription':{
-	    exec { "vormetric_data_decryption":
+	    exec { "vormetric_data_decryption_special":
 		  cwd     => "$vm_management_folder",
 		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
 		  command => "python vormetric_agent_management.py decrypt noupdate $vormetric::params::guardpoint",
@@ -95,7 +95,7 @@ class vormetric::agent::linux::install() {
 		  cwd     => "$vm_management_folder",
 		  path    => "/bin:/sbin:/usr/bin:/usr/sbin:",
 		  command => "python vormetric_agent_management.py uninstall",
-          require => [Exec["vormetric_data_decryption"]],
+          require => [Exec["vormetric_data_decryption_special"]],
 		}
 	  }
     }

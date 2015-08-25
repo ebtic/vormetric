@@ -95,7 +95,7 @@ class vormetric::agent::windows::install (
 		exec { "vormetric_data_decryption":
 		  cwd     => "$vm_management_folder",
 		  path    => "C:/Python27",
-		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
+		  command => "python vormetric_agent_management.py decrypt update $vormetric::params::guardpoint",
           require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
 		}
 	  }
@@ -104,7 +104,7 @@ class vormetric::agent::windows::install (
 	    exec { "vormetric_data_clear":
 		  cwd     => "$vm_management_folder",
 		  path    => "C:/Python27",
-		  command => "python vormetric_agent_management.py decrypt $vormetric::params::guardpoint",
+		  command => "python vormetric_agent_management.py decrypt update $vormetric::params::guardpoint",
           require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
 		}
 	  }
@@ -115,6 +115,22 @@ class vormetric::agent::windows::install (
 		  path    => "C:/Python27",
 		  command => "python vormetric_agent_management.py uninstall",
           require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
+		}
+	  }
+	  
+	  'Unsubscription':{
+	    exec { "vormetric_data_decryption_special":
+		  cwd     => "$vm_management_folder",
+		  path    => "C:/Python27",
+		  command => "python vormetric_agent_management.py decrypt noupdate $vormetric::params::guardpoint",
+          require => [Package["python"], [File["${vm_management_folder}/vormetric_agent_management.py"]]],
+		}
+		
+		exec { "vormetric_data_uninstallation":
+		  cwd     => "$vm_management_folder",
+		  path    => "C:/Python27",
+		  command => "python vormetric_agent_management.py uninstall",
+          require => [Exec["vormetric_data_decryption_special"]],
 		}
 	  }
     }
