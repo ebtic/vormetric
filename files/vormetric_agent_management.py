@@ -357,9 +357,9 @@ if __name__ == "__main__":
         import pexpect
         try:
           cont = True
-          child = pexpect.spawn(execution_command, timeout=None)
+          child = pexpect.spawn(execution_command, timeout=60)
           while cont:
-            i = child.expect(['Do you want to continue with agent registration\? \(Y/N\)'], timeout=None)
+            i = child.expect(['Do you want to continue with agent registration\? \(Y/N\)'], timeout=60)
             if i == 0:
               child.sendline('Y')
               cont = False
@@ -367,7 +367,7 @@ if __name__ == "__main__":
               child.sendline('')
           child.expect(pexpect.EOF)
           update_facts('running', platform.system())
-        except pexpect.EOF:
+        except pexpect.EOF, pexpect.TIMEOUT:
           pass       
     else:
       logging.info('Failed to get the agent installer')
