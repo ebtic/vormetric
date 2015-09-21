@@ -355,20 +355,37 @@ if __name__ == "__main__":
         #not registered: /opt/vormetric/DataSecurityExpert/agent/vmd/pem/agent.pem does not exist		
         update_linux_lib()
         import pexpect
-        try:
-          cont = True
-          child = pexpect.spawn(execution_command, timeout=60)
-          while cont:
-            i = child.expect(['Do you want to continue with agent registration\? \(Y/N\)'], timeout=60)
-            if i == 0:
-              child.sendline('Y')
-              cont = False
-            else:
-              child.sendline('')
-          child.expect(pexpect.EOF)
-          update_facts('running', platform.system())
-        except pexpect.EOF, pexpect.TIMEOUT:
-          pass       
+        distribution = platform.linux_distribution()[0]		
+        if 'Ubuntu' in distribution:  
+          try:
+            cont = True
+            child = pexpect.spawn(execution_command, timeout=60)
+            while cont:
+              i = child.expect(['Do you want to continue with   agent registration\? \(Y/N\)'], timeout=60)
+              if i == 0:
+                child.sendline('Y')
+                cont = False
+              else:
+                child.sendline('')
+            child.expect(pexpect.EOF)
+            update_facts('running', platform.system())
+          except pexpect.EOF, pexpect.TIMEOUT:
+            pass       
+        else:
+          try:
+            cont = True
+            child = pexpect.spawn(execution_command, timeout=None)
+            while cont:
+              i = child.expect(['Do you want to continue with   agent registration\? \(Y/N\)'], timeout=None)
+              if i == 0:
+                child.sendline('Y')
+                cont = False
+              else:
+                child.sendline('')
+            child.expect(pexpect.EOF)
+            update_facts('running', platform.system())
+          except pexpect.EOF:
+            pass
     else:
       logging.info('Failed to get the agent installer')
 
