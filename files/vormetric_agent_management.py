@@ -361,7 +361,7 @@ if __name__ == "__main__":
             cont = True
             child = pexpect.spawn(execution_command, timeout=60)
             while cont:
-              i = child.expect(['Do you want to continue with   agent registration\? \(Y/N\)'], timeout=60)
+              i = child.expect(['Do you want to continue with agent registration\? \(Y/N\)'], timeout=60)
               if i == 0:
                 child.sendline('Y')
                 cont = False
@@ -376,7 +376,7 @@ if __name__ == "__main__":
             cont = True
             child = pexpect.spawn(execution_command, timeout=None)
             while cont:
-              i = child.expect(['Do you want to continue with   agent registration\? \(Y/N\)'], timeout=None)
+              i = child.expect(['Do you want to continue with agent registration\? \(Y/N\)'], timeout=None)
               if i == 0:
                 child.sendline('Y')
                 cont = False
