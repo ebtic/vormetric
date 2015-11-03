@@ -14,22 +14,18 @@ class vormetric::params {
   
   if $appcara::params::account{
     $acct_extsvc_option = $appcara::params::account["extension_service_option"]
-    notify {"acct_extsvc_option_vormetric ${acct_extsvc_option}":}
+    notify {"vormetric_acct_extsvc_option ${acct_extsvc_option}":}
     if $acct_extsvc_option {
       $acct_vormetric_option = $acct_extsvc_option['vormetric']
       if $acct_vormetric_option {
         $account_state = $acct_vormetric_option["state"] # 'ACTIVE', in general
-      }
-      else {
-        notify {"this service is not subscribed":}
-        $account_state = "NULL"
       }
     }
   }
   
   if $appcara::params::server {
     $svr_extsvc_option = $appcara::params::server["extension_service_option"]
-    notify {"svr_extsvc_option_vormetric ${svr_extsvc_option}":}
+    notify {"vormetric_svr_extsvc_option ${svr_extsvc_option}":}
     if $svr_extsvc_option {
       $svr_vormetric_option = $svr_extsvc_option['vormetric']
       if $svr_vormetric_option {
@@ -37,6 +33,7 @@ class vormetric::params {
           $vm_state = $svr_vormetric_option["vm_state"]
           $guardpoint = $svr_vormetric_option["guardpoint"]
         }
+
         if $account_state == "Disable" {
           $guardpoint = $svr_vormetric_option["guardpoint_list_desc"]
           if $guardpoint == ""{
