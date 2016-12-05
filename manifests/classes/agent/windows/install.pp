@@ -31,7 +31,8 @@ class vormetric::agent::windows::install (
 
   #create management folder
   $vm_management_folder = "C:/btconfig"
-  $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
+   # -amazon- $agent_download_url = "ec2-54-161-187-162.compute-1.amazonaws.com"
+  $agent_download_url = "10.255.92.70"
   $vm_dns = "$::appstack_server_identifier.$::domain"
 	
   if $vormetric::params::files_existed == "true" {
